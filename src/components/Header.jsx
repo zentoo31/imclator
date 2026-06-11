@@ -34,10 +34,12 @@ export default function Header() {
               </Link>
             </li>
             <li>
-              <a href="#" className="nav-link">
+              <Link 
+                to="/calculadora-calorias-diarias" 
+                className={`nav-link ${isActive('/calculadora-calorias-diarias') ? 'active' : ''}`}
+              >
                 Calorías Diarias
-                <span className="badge-future">Próximamente</span>
-              </a>
+              </Link>
             </li>
             <li>
               <a href="#" className="nav-link">
