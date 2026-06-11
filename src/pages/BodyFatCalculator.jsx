@@ -33,10 +33,8 @@ export default function BodyFatCalculator() {
 
       return Math.max(0, Math.min(100, bodyFat))
     } else if (method === 'katch-mcardle') {
-      // Katch-McArdle formula: ((700 / lean body mass in lbs) * 100) - 700
-      // Assuming leanMass is in kg, convert to lbs
-      const leanMassLbs = leanMass * 2.20462
-      const bodyFat = (700 / leanMassLbs) - 700
+      // Katch-McArdle formula: Body Fat % = ((Total Weight - Lean Body Mass) / Total Weight) * 100
+      const bodyFat = ((weight - leanMass) / weight) * 100
       return Math.max(0, Math.min(100, bodyFat))
     }
     return 0
