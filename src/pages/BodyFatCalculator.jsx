@@ -1,6 +1,50 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function BodyFatCalculator() {
+  useEffect(() => {
+    document.title = "Calculadora de Grasa Corporal | Porcentaje de Grasa | IMClator"
+    
+    const metaDesc = document.querySelector('meta[name="description"]')
+    if (metaDesc) {
+      metaDesc.setAttribute('content', 'Calcula tu porcentaje de grasa corporal utilizando los métodos científicos de Jackson-Pollock y Katch-McArdle de forma rápida y visual.')
+    }
+    
+    let canonical = document.querySelector('link[rel="canonical"]')
+    const canonicalUrl = "https://imclator.vercel.app/calculadora-grasa-corporal"
+    if (canonical) {
+      canonical.setAttribute('href', canonicalUrl)
+    } else {
+      canonical = document.createElement('link')
+      canonical.setAttribute('rel', 'canonical')
+      canonical.setAttribute('href', canonicalUrl)
+      document.head.appendChild(canonical)
+    }
+
+    const schemaId = 'json-ld-bodyfat-calculator'
+    let schemaScript = document.getElementById(schemaId)
+    if (!schemaScript) {
+      schemaScript = document.createElement('script')
+      schemaScript.id = schemaId;
+      schemaScript.type = 'application/ld+json'
+      document.head.appendChild(schemaScript)
+    }
+    schemaScript.innerHTML = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Calculadora de Grasa Corporal - IMClator",
+      "url": canonicalUrl,
+      "description": "Calculadora científica de grasa corporal. Permite estimar el porcentaje graso utilizando fórmulas antropométricas.",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires HTML5/JavaScript support",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "USD"
+      }
+    })
+  }, [])
+
   const [method, setMethod] = useState('jackson-pollock')
   const [gender, setGender] = useState('male')
   const [age, setAge] = useState(25)
@@ -296,7 +340,7 @@ export default function BodyFatCalculator() {
 
             {/* Jackson-Pollock Measurements */}
             {method === 'jackson-pollock' && (
-              <>
+              <div className="animate-fade-in">
                 <h3 style={{ marginTop: '24px', marginBottom: '16px', fontSize: '14px', fontWeight: '600', color: 'var(--text-primary)' }}>
                   Medidas en Milímetros (mm)
                 </h3>
@@ -408,36 +452,38 @@ export default function BodyFatCalculator() {
                     onChange={(e) => setTriceps(Number(e.target.value))}
                   />
                 </div>
-              </>
+              </div>
             )}
 
             {/* Katch-McArdle Lean Mass */}
             {method === 'katch-mcardle' && (
-              <div className="form-group">
-                <div className="label-row">
-                  <label htmlFor="lean-mass-input" className="input-label">Masa Magra (Lean Mass)</label>
-                  <div className="value-input-wrapper">
-                    <input 
-                      id="lean-mass-input"
-                      type="number" 
-                      className="value-input" 
-                      value={leanMass}
-                      min="20"
-                      max="200"
-                      onChange={(e) => setLeanMass(e.target.value === '' ? 0 : Number(e.target.value))}
-                      aria-label="Masa magra en kilogramos"
-                    />
-                    <span className="value-unit">kg</span>
+              <div className="animate-fade-in">
+                <div className="form-group">
+                  <div className="label-row">
+                    <label htmlFor="lean-mass-input" className="input-label">Masa Magra (Lean Mass)</label>
+                    <div className="value-input-wrapper">
+                      <input 
+                        id="lean-mass-input"
+                        type="number" 
+                        className="value-input" 
+                        value={leanMass}
+                        min="20"
+                        max="200"
+                        onChange={(e) => setLeanMass(e.target.value === '' ? 0 : Number(e.target.value))}
+                        aria-label="Masa magra en kilogramos"
+                      />
+                      <span className="value-unit">kg</span>
+                    </div>
                   </div>
+                  <input 
+                    type="range" 
+                    min="20" 
+                    max="200" 
+                    value={leanMass}
+                    onChange={(e) => setLeanMass(Number(e.target.value))}
+                    aria-label="Deslizador de masa magra"
+                  />
                 </div>
-                <input 
-                  type="range" 
-                  min="20" 
-                  max="200" 
-                  value={leanMass}
-                  onChange={(e) => setLeanMass(Number(e.target.value))}
-                  aria-label="Deslizador de masa magra"
-                />
               </div>
             )}
           </div>
