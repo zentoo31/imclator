@@ -1,6 +1,50 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function ImcCalculator() {
+  useEffect(() => {
+    document.title = "Calculadora de IMC Profesional | Peso Ideal y Salud | IMClator"
+    
+    const metaDesc = document.querySelector('meta[name="description"]')
+    if (metaDesc) {
+      metaDesc.setAttribute('content', 'Calcula tu Índice de Masa Corporal (IMC) gratis al instante. Descubre tu rango de peso ideal y obtén recomendaciones de salud personalizadas.')
+    }
+    
+    let canonical = document.querySelector('link[rel="canonical"]')
+    const canonicalUrl = "https://imclator.vercel.app/"
+    if (canonical) {
+      canonical.setAttribute('href', canonicalUrl)
+    } else {
+      canonical = document.createElement('link')
+      canonical.setAttribute('rel', 'canonical')
+      canonical.setAttribute('href', canonicalUrl)
+      document.head.appendChild(canonical)
+    }
+
+    const schemaId = 'json-ld-imc-calculator'
+    let schemaScript = document.getElementById(schemaId)
+    if (!schemaScript) {
+      schemaScript = document.createElement('script')
+      schemaScript.id = schemaId;
+      schemaScript.type = 'application/ld+json'
+      document.head.appendChild(schemaScript)
+    }
+    schemaScript.innerHTML = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Calculadora de IMC - IMClator",
+      "url": canonicalUrl,
+      "description": "Calculadora de IMC (Índice de Masa Corporal) profesional, moderna y gratuita. Calcula tu peso ideal al instante de forma visual e interactiva.",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires HTML5/JavaScript support",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "USD"
+      }
+    })
+  }, [])
+
   // Unit System: 'metric' (kg, cm) or 'imperial' (lbs, ft/in)
   const [unitSystem, setUnitSystem] = useState('metric')
   
