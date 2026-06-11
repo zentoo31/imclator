@@ -456,11 +456,56 @@ export default function BodyFatCalculator() {
           </h2>
 
           <div className="result-section" style={{ gap: '20px' }}>
-            {/* Body Fat Percentage Display */}
+            {/* Body Fat Percentage Display with Circular Gauge */}
             <div className="gauge-container">
-              <div style={{ textAlign: 'center' }}>
-                <div className="bmi-large" style={{ color: category.color }}>{bodyFat.toFixed(1)}%</div>
-                <div className="bmi-label-small">Grasa Corporal</div>
+              <svg viewBox="0 0 200 120" className="gauge-svg" aria-hidden="true">
+                <defs>
+                  <linearGradient id="bodyfat-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#ec4899" />
+                    <stop offset="20%" stopColor="#0284c7" />
+                    <stop offset="50%" stopColor="#06b6d4" />
+                    <stop offset="75%" stopColor="#10b981" />
+                    <stop offset="100%" stopColor="#f97316" />
+                  </linearGradient>
+                </defs>
+                
+                {/* Gauge Arc Track Background */}
+                <path 
+                  d="M20,100 A80,80 0 0,1 180,100" 
+                  fill="none" 
+                  stroke="var(--border-color)" 
+                  strokeWidth="14" 
+                  strokeLinecap="round" 
+                />
+                {/* Color Arc representation */}
+                <path 
+                  d="M20,100 A80,80 0 0,1 180,100" 
+                  fill="none" 
+                  stroke="url(#bodyfat-gradient)" 
+                  strokeWidth="14" 
+                  strokeLinecap="round" 
+                />
+                
+                {/* Needle pointer */}
+                <g transform={`translate(100, 100) rotate(${(bodyFat / 50) * 180 - 90})`}>
+                  <line 
+                    x1="0" 
+                    y1="0" 
+                    x2="0" 
+                    y2="-78" 
+                    stroke={category.color} 
+                    strokeWidth="3.5" 
+                    strokeLinecap="round" 
+                    style={{ transition: 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), stroke 0.3s ease' }}
+                  />
+                  <circle cx="0" cy="0" r="8" fill={category.color} style={{ transition: 'fill 0.3s ease' }} />
+                  <circle cx="0" cy="0" r="4.5" fill="var(--bg-main)" style={{ transition: 'fill 0.3s ease' }} />
+                </g>
+              </svg>
+
+              <div className="gauge-bmi-overlay">
+                <div className="bmi-large" style={{ color: category.color }}>{bodyFat.toFixed(1)}</div>
+                <div className="bmi-label-small">% Grasa</div>
               </div>
             </div>
 
